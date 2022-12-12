@@ -2,10 +2,10 @@
 # This needs to be bullseye-slim because the Ruby image is built on bullseye-slim
 ARG NODE_VERSION="16.18.1-bullseye-slim"
 
-FROM ghcr.io/moritzheiber/ruby-jemalloc:3.1.2-slim as ruby
+FROM ghcr.io/moritzheiber/ruby-jemalloc:3.0.4-slim as ruby
 FROM node:${NODE_VERSION} as build
 
-COPY --link --from=ruby /opt/ruby /opt/ruby
+COPY --from=ruby /opt/ruby /opt/ruby
 
 ENV DEBIAN_FRONTEND="noninteractive" \
     PATH="${PATH}:/opt/ruby/bin"
@@ -31,22 +31,19 @@ RUN apt update && \
         ca-certificates \
         libreadline8 \
         python3 \
-        shared-mime-info
-
-RUN  bundle config set --local deployment 'true' && \
+        shared-mime-info && \
+    bundle config set --local deployment 'true' && \
     bundle config set --local without 'development test' && \
-    bundle config set silence_root_warning true
-
-RUN bundle install -j"$(nproc)"
-
-RUN yarn install --pure-lockfile --network-timeout 600000
+    bundle config set silence_root_warning true && \
+    bundle install -j"$(nproc)" && \
+    yarn install --pure-lockfile --network-timeout 600000
 
 FROM node:${NODE_VERSION}
 
 ARG UID="991"
 ARG GID="991"
 
-COPY --link --from=ruby /opt/ruby /opt/ruby
+COPY --from=ruby /opt/ruby /opt/ruby
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
@@ -72,7 +69,8 @@ RUN apt-get update && \
         ca-certificates \
         tzdata \
         libreadline8 \
-        tini
+        tini && \
+    ln -s /opt/mastodon /mastodon
 
 # Note: no, cleaning here since Debian does this automatically
 # See the file /etc/apt/apt.conf.d/docker-clean within the Docker image's filesystem
@@ -95,4 +93,4 @@ RUN OTP_SECRET=precompile_placeholder SECRET_KEY_BASE=precompile_placeholder rai
 
 # Set the work dir and the container entry point
 ENTRYPOINT ["/usr/bin/tini", "--"]
-EXPOSE 5000
+EXPOSE 3000
