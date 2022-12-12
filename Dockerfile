@@ -13,7 +13,6 @@ ENV DEBIAN_FRONTEND="noninteractive" \
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 WORKDIR /opt/mastodon
-COPY Gemfile* package.json yarn.lock /opt/mastodon/
 
 RUN apt update && \
     apt-get install -y --no-install-recommends build-essential \
@@ -34,9 +33,12 @@ RUN apt update && \
         shared-mime-info && \
     bundle config set --local deployment 'true' && \
     bundle config set --local without 'development test' && \
-    bundle config set silence_root_warning true && \
-    bundle install -j"$(nproc)" && \
-    yarn install --pure-lockfile --network-timeout 600000
+    bundle config set silence_root_warning true
+
+COPY Gemfile* package.json yarn.lock /opt/mastodon/
+
+RUN bundle install -j"$(nproc)"
+RUN yarn install --pure-lockfile --network-timeout 600000
 
 FROM node:${NODE_VERSION}
 
