@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 source 'https://rubygems.org'
-ruby '>= 2.7.0', '< 3.1.0'
+ruby '~> 3.1'
 
 gem 'pkg-config', '~> 1.5'
 gem 'rexml', '~> 3.2'
@@ -32,6 +32,8 @@ gem 'charlock_holmes', '~> 0.7.7'
 gem 'chewy', '~> 7.2'
 gem 'devise', '~> 4.8'
 gem 'devise-two-factor', '~> 4.0'
+
+gem 'foreman', require: false
 
 group :pam_authentication, optional: true do
   gem 'devise_pam_authenticatable2', '~> 9.2'

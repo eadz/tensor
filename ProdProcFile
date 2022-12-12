@@ -1,6 +1,8 @@
 web: bin/heroku-web
 worker: bundle exec sidekiq
-web: yarn run start
+streaming: RUN_STREAMING=true yarn run start
+nginx: nginx -g 'daemon off;'
+
 # For the streaming API, you need a separate app that shares Postgres and Redis:
 #
 # heroku create
