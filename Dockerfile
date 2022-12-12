@@ -31,12 +31,15 @@ RUN apt update && \
         ca-certificates \
         libreadline8 \
         python3 \
-        shared-mime-info && \
-    bundle config set --local deployment 'true' && \
+        shared-mime-info
+
+RUN  bundle config set --local deployment 'true' && \
     bundle config set --local without 'development test' && \
-    bundle config set silence_root_warning true && \
-    bundle install -j"$(nproc)" && \
-    yarn install --pure-lockfile --network-timeout 600000
+    bundle config set silence_root_warning true
+
+RUN bundle install -j"$(nproc)"
+
+RUN yarn install --pure-lockfile --network-timeout 600000
 
 FROM node:${NODE_VERSION}
 
