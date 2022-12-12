@@ -2,16 +2,16 @@
 # important settings can be changed from the admin interface.
 
 defaults: &defaults
-  site_title: Mastodon
-  site_short_description: ''
+  site_title: m5.nz
+  site_short_description: 'm5.nz'
   site_description: ''
   site_extended_description: ''
   site_terms: ''
-  site_contact_username: ''
-  site_contact_email: ''
-  registrations_mode: 'open'
-  profile_directory: true
-  closed_registrations_message: ''
+  site_contact_username: '@eadz'
+  site_contact_email: 'eadz@m5.nz'
+  registrations_mode: 'closed'
+  profile_directory: false
+  closed_registrations_message: 'contact if you want an account here'
   open_deletion: true
   min_invite_role: 'admin'
   timeline_preview: true

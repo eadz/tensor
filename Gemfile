@@ -5,7 +5,7 @@ ruby '~> 3.1'
 
 gem 'pkg-config', '~> 1.5'
 gem 'rexml', '~> 3.2'
-
+gem 'net-pop'
 gem 'puma', '~> 5.6'
 gem 'rails', '~> 6.1.7'
 gem 'sprockets', '~> 3.7.2'
